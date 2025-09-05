@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
+/** Bootstrap function to initialize the NestJS application */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
@@ -12,9 +13,9 @@ async function bootstrap() {
     }),
   );
   const config = new DocumentBuilder()
-    .setTitle('User Authentication')
+    .setTitle('RAO Rentals API')
     .setDescription(
-      'The API details for the User Authentication Demo application using Firebase in the NestJS backend.',
+      'The API details for the data pipelines used in the NestJS backend.',
     )
     .setVersion('1.0')
     .addTag('Authentication')

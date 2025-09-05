@@ -19,7 +19,7 @@ import { useProfileCompleteStore } from "../../stores/profileCompleteStore";
 import { useAuthStore } from "../../stores/authStore";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Constants from "expo-constants";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Region } from "react-native-maps";
 import DateTimePicker, {
   DateType,
   useDefaultStyles,
@@ -33,11 +33,17 @@ import { getAuth } from "@react-native-firebase/auth";
 import { getApp } from "@react-native-firebase/app";
 import { signOut } from "@react-native-firebase/auth";
 import { useCallback } from "react";
+import notifee, { AndroidStyle } from "@notifee/react-native"; // remove after done testing!!
+import { useVehicles } from "../../hooks/vehicle/useVehicles";
 
 dayjs.locale("en");
 
 const GOOGLE_MAPS_API_KEY = Constants.expoConfig?.extra?.GOOGLE_MAPS_API_KEY;
 const { height, width } = Dimensions.get("window");
+async function requestPermissionIfNeeded() {
+  const settings = await notifee.requestPermission();
+  // Optionally check settings.authorizationStatus
+}
 
 export default function MainAppScreen() {
   const [loading, setLoading] = useState(true);
@@ -47,44 +53,64 @@ export default function MainAppScreen() {
   const [isEnabled, setIsEnabled] = useState(true);
   const [isCurrentLocationEnabled, setIsCurrentLocationEnabled] =
     useState(true);
-  const [region, setRegion] = useState({
+  const [pendingRegion, setPendingRegion] = useState<Region | null>(null);
+  const [region, setRegion] = useState<Region>({
     latitude: 34.0522,
     longitude: -118.2437,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
   });
+  const { vehicles, fetchVehiclesNearby } = useVehicles();
   const defaultStyles = useDefaultStyles();
   const [startDate, setStartDate] = useState<DateType>();
   const [endDate, setEndDate] = useState<DateType>();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [hasRedirected, setHasRedirected] = useState(false); // Prevent infinite redirects
 
+  requestPermissionIfNeeded();
+  function getRadiusFromRegion(region: { latitudeDelta: number }) {
+    // Approximate: 1 degree latitude ≈ 111km
+    return (region.latitudeDelta / 2) * 111;
+  }
+
+  function areRegionsEqual(
+    r1: Region,
+    r2: Region,
+    threshold = 0.0001
+  ): boolean {
+    return (
+      Math.abs(r1.latitude - r2.latitude) < threshold &&
+      Math.abs(r1.longitude - r2.longitude) < threshold &&
+      Math.abs(r1.latitudeDelta - r2.latitudeDelta) < threshold &&
+      Math.abs(r1.longitudeDelta - r2.longitudeDelta) < threshold
+    );
+  }
+
   useEffect(() => {
-    console.log("MainAppScreen mounted");
-    console.log("User in main app:", user);
-    
-    // Since (app)/_layout.tsx handles auth guards, we can be more confident here
-    // Just wait for user sync if needed
-    if (!user) {
-      console.log("MainAppScreen: Waiting for user data to sync...");
-      setLoading(false);
-      return;
-    }
-    
-    console.log("MainAppScreen: User data available, ready to render");
-    setLoading(false);
-  }, [user]);
+    console.log("useEffect triggered", region, fetchVehiclesNearby);
+    const timeout = setTimeout(() => {
+      const radius = getRadiusFromRegion(region);
+      fetchVehiclesNearby(region.latitude, region.longitude, radius);
+    }, 400); // Debounce
+
+    return () => clearTimeout(timeout);
+  }, [region, fetchVehiclesNearby]);
 
   // Handle back navigation - show logout confirmation modal only when this screen is focused
   useFocusEffect(
     useCallback(() => {
       const backAction = () => {
-        console.log("Back button pressed on main app - showing logout confirmation modal");
+        console.log(
+          "Back button pressed on main app - showing logout confirmation modal"
+        );
         setShowLogoutModal(true);
         return true; // Prevent default behavior
       };
 
-      const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
 
       return () => backHandler.remove();
     }, [])
@@ -95,17 +121,19 @@ export default function MainAppScreen() {
     console.log("Starting logout process...");
     setShowLogoutModal(false);
     useLoadingStore.getState().setLoading(true);
-    
+
     try {
       // Clear Zustand state first
       useAuthStore.getState().clearUser();
       console.log("Cleared Zustand user data");
-      
+
       // Sign out from Firebase
       const app = getApp();
       const auth = getAuth(app);
       await signOut(auth);
-      console.log("Firebase signOut completed - navigation will be handled by root layout");
+      console.log(
+        "Firebase signOut completed - navigation will be handled by root layout"
+      );
     } catch (error) {
       console.log("Logout error:", error);
       useLoadingStore.getState().setLoading(false);
@@ -131,23 +159,33 @@ export default function MainAppScreen() {
   }
 
   // TODO: Create Notifications Screen
-  const handleNotificationsPress = () => {
-    console.log("Notifications button pressed - NOT setting loading state");
-    // Disabled the loading state to prevent infinite loading
-    // useLoadingStore.getState().setLoading(true);
-    // setTimeout(() => {
-    //   useLoadingStore.getState().setLoading(false);
-    // }, 3000);
-  };
+  async function handleTestNotification() {
+    try {
+      await notifee.displayNotification({
+        title: "Test Notification",
+        body: "This is a local test notification!",
+        android: {
+          channelId: "alerts",
+          color: "#c41111",
+          // smallIcon: "ic_stat_name", // Remove or ensure it exists
+          style: {
+            type: AndroidStyle.BIGPICTURE,
+            picture: "https://placekitten.com/400/300",
+          },
+          actions: [{ title: "Action 1", pressAction: { id: "action-1" } }],
+        },
+      });
+    } catch (e) {
+      console.log("Notifee error:", e);
+    }
+  }
 
   return (
     <>
       <GlobalLoading />
       <SafeAreaView className="flex-1 bg-gray-100 items-center">
         {/* Top circle buttons */}
-        <View
-          className="flex-row justify-between w-11/12 mb-6"
-        >
+        <View className="flex-row justify-between w-11/12 mb-6">
           <DashboardMenuButton
             className="bg-white rounded-full p-2"
             style={styles.circleButton}
@@ -162,7 +200,7 @@ export default function MainAppScreen() {
             <Text className="text-ruby">X</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={handleNotificationsPress}
+            onPress={handleTestNotification}
             style={styles.circleButton}
           >
             <BellIcon size={30} />
@@ -172,7 +210,7 @@ export default function MainAppScreen() {
         {/* Two stacked views at the top (each about 1/6 of height, together ~1/3) */}
         <View
           className="flex flex-col w-11/12 bg-white rounded-2xl mb-6 items-center py-6 gap-3"
-          style={[styles.shadow,]}
+          style={[styles.shadow]}
         >
           <Text className="font-semibold text-2xl self-start px-6">
             City, Address, Airport
@@ -183,7 +221,7 @@ export default function MainAppScreen() {
             onPress={(data, details = null) => {
               if (details && details.geometry && details.geometry.location) {
                 const { lat, lng } = details.geometry.location;
-                setRegion({
+                setPendingRegion({
                   latitude: lat,
                   longitude: lng,
                   latitudeDelta: 0.0922,
@@ -332,19 +370,29 @@ export default function MainAppScreen() {
             <MapView
               style={{ width: "100%", height: "100%", borderRadius: 16 }}
               region={region}
+              onRegionChangeComplete={(newRegion) => {
+                if (!areRegionsEqual(region, newRegion)) {
+                  setRegion(newRegion);
+                }
+              }}
               scrollEnabled={isCurrentLocationEnabled}
               zoomEnabled={isCurrentLocationEnabled}
               pitchEnabled={isCurrentLocationEnabled}
               rotateEnabled={isCurrentLocationEnabled}
             >
-              <Marker
-                coordinate={{
-                  latitude: region.latitude,
-                  longitude: region.longitude,
-                }}
-                image={require("../../assets/rao-icon-medium.png")}
-                opacity={0.7}
-              />
+              {vehicles.map((vehicle) =>
+                vehicle.address ? (
+                  <Marker
+                    key={vehicle.id}
+                    coordinate={{
+                      latitude: vehicle.address.latitude ?? 0,
+                      longitude: vehicle.address.longitude ?? 0,
+                    }}
+                    icon={require("../../assets/rao-icon-medium.png")}
+                    title={`${vehicle.make} ${vehicle.model}`}
+                  />
+                ) : null
+              )}
             </MapView>
           </View>
         </View>
@@ -356,7 +404,12 @@ export default function MainAppScreen() {
         >
           <Button
             title="View Rentals"
-            onPress={() => {}}
+            onPress={() => {
+              if (pendingRegion) {
+                setRegion(pendingRegion);
+              }
+              // In the future, add more logic here for availability, preferences, etc.
+            }}
             className="w-11/12 bg-ruby"
             textClassName="text-white"
           />
@@ -404,7 +457,7 @@ export default function MainAppScreen() {
           </View>
         </View>
       )}
-      
+
       {/* Logout Confirmation Modal */}
       <LogoutConfirmationModal
         visible={showLogoutModal}
