@@ -2,9 +2,17 @@
 "use client";
 import { useState } from "react";
 import { Home, Users, Settings } from "lucide-react";
+import UsersPage from "./userpage";
+import SettingsPage from "./settingspage";
 
 export default function App() {
   const [active, setActive] = useState("Dashboard");
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  function toggleDarkMode(value: boolean): void {
+    setDarkMode(value);
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -37,9 +45,9 @@ export default function App() {
       <main className="flex-1 p-6">
         <h2 className="text-3xl font-semibold mb-4">{active}</h2>
         <div className="bg-white rounded-2xl shadow p-6">
-          {active === "Dashboard" && <p>📊 Analytics Overview here</p>}
-          {active === "Users" && <p>👥 Manage users here</p>}
-          {active === "Settings" && <p>⚙️ Update settings here</p>}
+          {active === "Dashboard" && <p>📊 Overview</p>}
+          {active === "Users" && <p>👥 <UsersPage /></p>}
+          {active === "Settings" && <p>⚙️  <SettingsPage darkMode={darkMode} setDarkMode={toggleDarkMode} /></p>}
         </div>
       </main>
     </div>
