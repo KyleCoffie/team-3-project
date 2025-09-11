@@ -24,14 +24,24 @@
 <title>cluster_FirebaseModule</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="159,-70 159,-268 337,-268 337,-70 159,-70"/>
 </g>
+<<<<<<< HEAD
 <g id="clust4" class="cluster">
 <title>cluster_FirebaseModule_exports</title>
 <polygon fill="none" stroke="black" points="186,-208 186,-260 310,-260 310,-208 186,-208"/>
 </g>
+=======
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
 <g id="clust6" class="cluster">
 <title>cluster_FirebaseModule_providers</title>
 <polygon fill="none" stroke="black" points="167,-78 167,-130 329,-130 329,-78 167,-78"/>
 </g>
+<<<<<<< HEAD
+=======
+<g id="clust4" class="cluster">
+<title>cluster_FirebaseModule_exports</title>
+<polygon fill="none" stroke="black" points="186,-208 186,-260 310,-260 310,-208 186,-208"/>
+</g>
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
 <!-- FirebaseService  -->
 <g id="node1" class="node">
 <title>FirebaseService </title>

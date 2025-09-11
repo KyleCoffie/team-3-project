@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+<<<<<<< HEAD
 import { GetUsersParamDto } from '../dto/get-users-param.dto';
+=======
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
 import { PatchUserDto } from '../dto/patch-user.dto';
 
 /**
@@ -8,6 +11,7 @@ import { PatchUserDto } from '../dto/patch-user.dto';
  */
 @Injectable()
 export class UsersService {
+<<<<<<< HEAD
   /**
    * Constructor to initialize PrismaService instance.
    */
@@ -29,6 +33,18 @@ export class UsersService {
         : ['Unknown', 'User'];
     const lastName = lastNameRaw ?? '';
 
+=======
+  /** Constructor to initialize PrismaService instance. */
+  constructor(private readonly prisma: PrismaService) {}
+
+  /** Creates a user in the database and authenticates them with FirebaseAuth. */
+  async upsertUser(data: {
+    firebaseUid: string;
+    email: string;
+    role: 'GUEST' | 'ADMIN';
+  
+  }) {
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
     return this.prisma.user.upsert({
       where: { firebaseUid: data.firebaseUid },
       update: {
@@ -37,13 +53,17 @@ export class UsersService {
       create: {
         firebaseUid: data.firebaseUid,
         email: data.email,
+<<<<<<< HEAD
         firstName,
         lastName,
+=======
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
         role: data.role,
       },
     });
   }
 
+<<<<<<< HEAD
   /**
 <<<<<<< HEAD
 =======
@@ -71,6 +91,9 @@ export class UsersService {
 >>>>>>> f983ccbf68eac6db21bda2dfad93f03290a2759a
    * Updates a user in the database.
    */
+=======
+  /** Updates a user in the database. */
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   async updateUser(firebaseUid: string, data: PatchUserDto) {
     const user = await this.prisma.user.update({
       where: { firebaseUid },
@@ -85,9 +108,13 @@ export class UsersService {
     });
   }
 
+<<<<<<< HEAD
   /**
    * Promotes a user to host or demotes them back to guest.
    */
+=======
+  /** Promotes a user to host or demotes them back to guest. */
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   async promoteToHost(firebaseUid: string) {
     const user = await this.prisma.user.findUnique({ where: { firebaseUid } });
 
@@ -98,4 +125,13 @@ export class UsersService {
       data: { role: newRole },
     });
   }
+<<<<<<< HEAD
+=======
+
+  async getMe(uid: string) {
+    return await this.prisma.user.findUnique({
+      where: { firebaseUid: uid },
+    });
+  }
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
 }

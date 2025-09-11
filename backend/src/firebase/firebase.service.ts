@@ -33,4 +33,11 @@ export class FirebaseService implements OnModuleInit {
       .storage()
       .bucket(this.configService.get<string>('FIREBASE_BUCKET_URL'));
   }
+<<<<<<< HEAD
+=======
+
+  async setUserRole(uid: string, role: string) {
+    await this.auth.setCustomUserClaims(uid, { role });
+  }
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
 }

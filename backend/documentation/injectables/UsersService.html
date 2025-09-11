@@ -144,6 +144,7 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Async</span>
+<<<<<<< HEAD
                                 <a href="#getUserById" >getUserById</a>
                             </li>
                             <li>
@@ -152,6 +153,8 @@
                             </li>
                             <li>
                                     <span class="modifier">Async</span>
+=======
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
                                 <a href="#promoteToHost" >promoteToHost</a>
                             </li>
                             <li>
@@ -185,7 +188,11 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
+<<<<<<< HEAD
                                 <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/user/providers/users.service.ts:10</a></div>
+=======
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/user/providers/users.service.ts:9</a></div>
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
                             </td>
                         </tr>
 
@@ -234,6 +241,7 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+<<<<<<< HEAD
                     <a name="getUserById"></a>
                     <span class="name">
                             <span class="modifier">Async</span>
@@ -400,6 +408,8 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+=======
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
                     <a name="promoteToHost"></a>
                     <span class="name">
                             <span class="modifier">Async</span>
@@ -418,8 +428,13 @@
 
                     <tr>
                         <td class="col-md-4">
+<<<<<<< HEAD
                             <div class="io-line">Defined in <a href="" data-line="88"
                                     class="link-to-prism">src/user/providers/users.service.ts:88</a></div>
+=======
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">src/user/providers/users.service.ts:58</a></div>
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
                         </td>
                     </tr>
 
@@ -489,8 +504,13 @@
 
                     <tr>
                         <td class="col-md-4">
+<<<<<<< HEAD
                             <div class="io-line">Defined in <a href="" data-line="71"
                                     class="link-to-prism">src/user/providers/users.service.ts:71</a></div>
+=======
+                            <div class="io-line">Defined in <a href="" data-line="43"
+                                    class="link-to-prism">src/user/providers/users.service.ts:43</a></div>
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
                         </td>
                     </tr>
 
@@ -572,8 +592,13 @@
 
                     <tr>
                         <td class="col-md-4">
+<<<<<<< HEAD
                             <div class="io-line">Defined in <a href="" data-line="19"
                                     class="link-to-prism">src/user/providers/users.service.ts:19</a></div>
+=======
+                            <div class="io-line">Defined in <a href="" data-line="14"
+                                    class="link-to-prism">src/user/providers/users.service.ts:14</a></div>
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
                         </td>
                     </tr>
 
@@ -629,7 +654,10 @@
     <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@nestjs/common&#x27;;
 import { PrismaService } from &#x27;../../prisma/prisma.service&#x27;;
+<<<<<<< HEAD
 import { GetUsersParamDto } from &#x27;../dto/get-users-param.dto&#x27;;
+=======
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
 import { PatchUserDto } from &#x27;../dto/patch-user.dto&#x27;;
 
 /**
@@ -637,6 +665,7 @@ import { PatchUserDto } from &#x27;../dto/patch-user.dto&#x27;;
  */
 @Injectable()
 export class UsersService {
+<<<<<<< HEAD
   /**
    * Constructor to initialize PrismaService instance.
    */
@@ -645,6 +674,12 @@ export class UsersService {
   /**
    * Creates a user in the database and authenticates them with FirebaseAuth.
    */
+=======
+  /** Constructor to initialize PrismaService instance. */
+  constructor(private readonly prisma: PrismaService) {}
+
+  /** Creates a user in the database and authenticates them with FirebaseAuth. */
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   async upsertUser(data: {
     firebaseUid: string;
     email: string;
@@ -673,6 +708,7 @@ export class UsersService {
     });
   }
 
+<<<<<<< HEAD
   /**
    * Fetches users from the database.
    */
@@ -697,6 +733,9 @@ export class UsersService {
   /**
    * Updates a user in the database.
    */
+=======
+  /** Updates a user in the database. */
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   async updateUser(firebaseUid: string, data: PatchUserDto) {
     const user &#x3D; await this.prisma.user.update({
       where: { firebaseUid },
@@ -711,9 +750,13 @@ export class UsersService {
     });
   }
 
+<<<<<<< HEAD
   /**
    * Promotes a user to host or demotes them back to guest.
    */
+=======
+  /** Promotes a user to host or demotes them back to guest. */
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   async promoteToHost(firebaseUid: string) {
     const user &#x3D; await this.prisma.user.findUnique({ where: { firebaseUid } });
 

@@ -602,6 +602,10 @@ export class VehicleController {
     @Query(&#x27;lng&#x27;) lng: number,
     @Query(&#x27;radius&#x27;) radius: number,
   ) {
+<<<<<<< HEAD
+=======
+    console.log(&#x27;Received /vehicles/nearby:&#x27;, { lat, lng, radius, types: { lat: typeof lat, lng: typeof lng, radius: typeof radius } });
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
     return this.vehicleService.findVehiclesNearby(lat, lng, radius);
   }
 }

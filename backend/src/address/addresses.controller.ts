@@ -3,11 +3,17 @@ import {
   Get,
   Post,
   Patch,
+<<<<<<< HEAD
   Put,
   Delete,
   Body,
   UseGuards,
   Req,
+=======
+  Delete,
+  Body,
+  UseGuards,
+>>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   Param,
 } from '@nestjs/common';
 import { AddressesService } from './providers/addresses.service';
