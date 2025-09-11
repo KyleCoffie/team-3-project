@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-import { Injectable } from '@nestjs/common';
-
-/** Service to manage admin-related operations */
-@Injectable()
-export class AdminsService {}
-=======
+// /** Service to manage admin-related operations */
+// @Injectable()
+// export class AdminsService {}
 import { Body, Injectable, Param, Patch } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetUsersFilter } from '../dto';
@@ -89,4 +85,3 @@ export class AdminsService {
     });
   }
 }
->>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb

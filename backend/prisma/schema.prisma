@@ -15,13 +15,8 @@ datasource db {
 
 model User {
   id              Int      @id @default(autoincrement())
-<<<<<<< HEAD
   firebaseUid     String   @unique @db.VarChar(128)
   firstName       String   @db.VarChar(150)
-=======
-  firebaseUid      String   @unique @db.VarChar(128)
-  firstName        String?   @db.VarChar(150)
->>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   lastName        String?  @db.VarChar(150)
   email           String   @unique @db.VarChar(320)
   phone           String?  @db.VarChar(15)
@@ -29,11 +24,7 @@ model User {
   role            Role     @default(GUEST)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-<<<<<<< HEAD
   verifiedDriver  Boolean  @default(false)
-=======
-  verifiedDriver   Boolean  @default(false)
->>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   rating          Int      @default(0)
   tripsCompleted  Int      @default(0)
   stripeAccountId String?  @db.VarChar(100)
@@ -64,11 +55,7 @@ model DriverLicense {
   expirationDate String   @db.VarChar(15)
   frontImage     String   @db.VarChar(2048)
   backImage      String   @db.VarChar(2048)
-<<<<<<< HEAD
   isVerified     Boolean  @default(false)
-=======
-  isVerified      Boolean  @default(false)
->>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -123,11 +110,7 @@ model Vehicle {
   seats           Int          @default(5)
   type            String
   vehicleImage    String?
-<<<<<<< HEAD
   verified        Boolean      @default(false)
-=======
-  verified         Boolean      @default(false)
->>>>>>> d2e94048e8728d36e6d24fc43c23638096f53ceb
   rating          Float        @default(0)
   hasSeatbelts    Boolean      @default(true)
   seatbeltType    SeatbeltType @default(BOTH)
