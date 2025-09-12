@@ -46,8 +46,8 @@ export default function App() {
         <h2 className="text-3xl font-semibold mb-4">{active}</h2>
         <div className="bg-white rounded-2xl shadow p-6">
           {active === "Dashboard" && <p>📊 Overview</p>}
-          {active === "Users" && <p>👥 <UsersPage /></p>}
-          {active === "Settings" && <p>⚙️  <SettingsPage darkMode={darkMode} setDarkMode={toggleDarkMode} /></p>}
+          {active === "Users" && <UsersPage />}
+          {active === "Settings" && <SettingsPage darkMode={darkMode} setDarkMode={toggleDarkMode} />}
         </div>
       </main>
     </div>
